@@ -4,7 +4,7 @@
 
 ![build](https://github.com/hunghv-dev/rgb_mix/actions/workflows/build.yml/badge.svg)
 ![test](https://github.com/hunghv-dev/rgb_mix/actions/workflows/test.yml/badge.svg)
-![codecov](https://codecov.io/gh/hunghv-dev/rgb_mix/branch/develop/graph/badge.svg?token=A35GR9UEBN)
+![codecov](https://codecov.io/gh/hunghv-dev/rgb_mix/branch/develop/graph/badge.svg?token=qzFRFZTevc)
 
 RBG mix app build with Flutter
 
