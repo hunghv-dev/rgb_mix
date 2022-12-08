@@ -25,11 +25,17 @@ class RgbState extends Equatable {
 
   String get colorCopy => '$red$green$blue';
 
-  double get redValue => red.toDouble * strokeWidth / 255;
+  double get redValue => red.toDouble;
 
-  double get greenValue => green.toDouble * strokeWidth / 255;
+  double get greenValue => green.toDouble;
 
-  double get blueValue => blue.toDouble * strokeWidth / 255;
+  double get blueValue => blue.toDouble;
+
+  double get redStrokeValue => red.toDouble * strokeWidth / 255;
+
+  double get greenStrokeValue => green.toDouble * strokeWidth / 255;
+
+  double get blueStrokeValue => blue.toDouble * strokeWidth / 255;
 
   @override
   List<Object?> get props => [red, green, blue];

@@ -31,6 +31,21 @@ extension LabelColorIndexExt on LabelColorIndex {
         return Colors.blue;
     }
   }
+
+  LabelColor get labelColor {
+    switch (index) {
+      case 0:
+      case 1:
+        return LabelColor.red;
+      case 2:
+      case 3:
+        return LabelColor.green;
+      case 4:
+      case 5:
+      default:
+        return LabelColor.blue;
+    }
+  }
 }
 
 extension ColorExt on Color {
@@ -40,4 +55,10 @@ extension ColorExt on Color {
         255 - green,
         255 - blue,
       );
+}
+
+extension DragUpdateDetailsExt on DragUpdateDetails {
+  bool get isDragUp => delta.dy < 0;
+
+  bool get isDragDown => delta.dy > 0;
 }

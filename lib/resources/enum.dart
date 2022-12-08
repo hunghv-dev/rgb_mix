@@ -6,3 +6,9 @@ enum LabelColorIndex {
   blueFirst,
   blueSecond,
 }
+
+enum LabelColor {
+  red,
+  green,
+  blue,
+}

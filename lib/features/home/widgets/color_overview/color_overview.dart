@@ -35,7 +35,7 @@ class ColorOverview extends StatelessWidget {
           BlocBuilder<RgbBloc, RgbState>(
             builder: (context, state) {
               return Red(
-                value: state.redValue,
+                value: state.redStrokeValue,
                 size: size,
                 strokeWidth: strokeWidth,
               );
@@ -44,7 +44,7 @@ class ColorOverview extends StatelessWidget {
           BlocBuilder<RgbBloc, RgbState>(
             builder: (context, state) {
               return Green(
-                value: state.greenValue,
+                value: state.greenStrokeValue,
                 size: size,
                 strokeWidth: strokeWidth,
               );
@@ -53,7 +53,7 @@ class ColorOverview extends StatelessWidget {
           BlocBuilder<RgbBloc, RgbState>(
             builder: (context, state) {
               return Blue(
-                value: state.blueValue,
+                value: state.blueStrokeValue,
                 size: size,
                 strokeWidth: strokeWidth,
               );

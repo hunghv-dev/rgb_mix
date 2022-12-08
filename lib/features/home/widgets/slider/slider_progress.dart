@@ -16,17 +16,29 @@ class SliderProgress extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SliderLine(
-              onChange: (hexValue) => bloc.add(ChangeRed(hexValue)),
-              color: Colors.red,
+            BlocSelector<RgbBloc, RgbState, double>(
+              selector: (state) => state.redValue,
+              builder: (context, redValue) => SliderLine(
+                value: redValue,
+                onChange: (hexValue) => bloc.add(ChangeRed(hexValue)),
+                color: Colors.red,
+              ),
             ),
-            SliderLine(
-              onChange: (hexValue) => bloc.add(ChangeGreen(hexValue)),
-              color: Colors.green,
+            BlocSelector<RgbBloc, RgbState, double>(
+              selector: (state) => state.greenValue,
+              builder: (context, greenValue) => SliderLine(
+                value: greenValue,
+                onChange: (hexValue) => bloc.add(ChangeGreen(hexValue)),
+                color: Colors.green,
+              ),
             ),
-            SliderLine(
-              onChange: (hexValue) => bloc.add(ChangeBlue(hexValue)),
-              color: Colors.blue,
+            BlocSelector<RgbBloc, RgbState, double>(
+              selector: (state) => state.blueValue,
+              builder: (context, blueValue) => SliderLine(
+                value: blueValue,
+                onChange: (hexValue) => bloc.add(ChangeBlue(hexValue)),
+                color: Colors.blue,
+              ),
             ),
           ],
         ),

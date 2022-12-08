@@ -27,6 +27,12 @@ class _SliderLineState extends State<SliderLine> {
   }
 
   @override
+  void didUpdateWidget(covariant SliderLine oldWidget) {
+    _value = widget.value;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
