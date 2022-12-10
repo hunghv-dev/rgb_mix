@@ -13,7 +13,7 @@ class BackgroundSlider extends StatelessWidget {
     Key? key,
     this.onHeroAnimationComplete,
     this.width = double.infinity,
-    this.height = 300,
+    this.height = 250,
   }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class BackgroundSlider extends StatelessWidget {
 class Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final radius = size.height / 6;
+    final radius = size.height / 5;
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..color = ColorResources.bgSlider;

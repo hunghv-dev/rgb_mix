@@ -11,7 +11,7 @@ class SliderProgress extends StatelessWidget {
     final bloc = context.read<RgbBloc>();
     return Container(
       height: 250,
-      alignment: Alignment.center,
+      alignment: Alignment.bottomCenter,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

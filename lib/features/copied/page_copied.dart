@@ -11,22 +11,19 @@ class PageCopied extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 50, bottom: 200),
-              child: LabelLogoApp(),
+            const LabelLogoApp(),
+            const Expanded(
+              child:
+                  Align(alignment: Alignment.center, child: PanelContainer()),
             ),
-            const PanelContainer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: ButtonProcess(
-                label: StringResources.labelButtonMixAgain,
-                onTap: () => Navigator.pop(context),
-              ),
+            ButtonProcess(
+              label: StringResources.labelButtonMixAgain,
+              onTap: () => Navigator.pop(context),
             ),
+            const SizedBox(height: 30),
           ],
         ),
       ),

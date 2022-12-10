@@ -57,7 +57,7 @@ void main() {
       await tester.pumpPageHome(bloc);
 
       /// red color label
-      final redLabelColorCode = find.byType(LabelColorCode).at(0);
+      final redLabelColorCode = find.byType(LabelColorCode).at(1);
       await tester.ensureVisible(redLabelColorCode);
       var firstLocation = tester.getCenter(redLabelColorCode);
       var secondLocation = -firstLocation.translate(0, 1);
@@ -70,7 +70,7 @@ void main() {
       expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '0']);
 
       /// green color label
-      final greenLabelColorCode = find.byType(LabelColorCode).at(2);
+      final greenLabelColorCode = find.byType(LabelColorCode).at(3);
       await tester.ensureVisible(greenLabelColorCode);
       firstLocation = tester.getCenter(greenLabelColorCode);
       secondLocation = -firstLocation.translate(0, 1);
@@ -83,7 +83,7 @@ void main() {
       expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '0']);
 
       /// blue color label
-      final blueLabelColorCode = find.byType(LabelColorCode).at(4);
+      final blueLabelColorCode = find.byType(LabelColorCode).at(5);
       await tester.ensureVisible(blueLabelColorCode);
       firstLocation = tester.getCenter(blueLabelColorCode);
       secondLocation = -firstLocation.translate(0, 1);

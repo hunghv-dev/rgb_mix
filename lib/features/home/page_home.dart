@@ -19,56 +19,61 @@ class PageHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          const Positioned(
-            left: -300,
-            right: -300,
-            bottom: 0,
-            top: 0,
-            child: Opacity(
-              opacity: 0,
-              child: LogoCircleWhite(),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            const Positioned(
+              left: -300,
+              right: -300,
+              bottom: 0,
+              top: 0,
+              child: Opacity(
+                opacity: 0,
+                child: LogoCircleWhite(),
+              ),
             ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: LabelLogoApp(),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 60),
-                  child: ColorOverview(size: 200),
-                ),
-                const LabelHexColor(),
-                Stack(
-                  children: const [
-                    BackgroundSlider(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 50.0),
-                      child: SliderProgress(),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: ButtonProcess(
-                    label: StringResources.labelButtonCopy,
-                    onTap: () => clipboard.setData.then(
-                      (_) => Navigator.push(
-                        context,
-                        Di.providerPageCopiedRouter(context),
-                      ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const LabelLogoApp(),
+                        const SizedBox(height: 50),
+                        const ColorOverview(size: 200),
+                        const SizedBox(height: 35),
+                        const LabelHexColor(),
+                        const SizedBox(height: 35),
+                        Stack(
+                          children:  const [
+                            BackgroundSlider(),
+                            Positioned(
+                                left: 0,
+                                right: 0,
+                                bottom: 15,
+                                child: SliderProgress())
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
+                ButtonProcess(
+                  label: StringResources.labelButtonCopy,
+                  onTap: () => clipboard.setData.then(
+                    (_) => Navigator.push(
+                      context,
+                      Di.providerPageCopiedRouter(context),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
