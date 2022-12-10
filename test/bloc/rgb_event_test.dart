@@ -3,6 +3,6 @@ import 'package:rgb_mix/bloc/rgb_bloc.dart';
 
 void main() {
   test('RgbEvent support for compare object', () {
-    expect(RgbEvent('test'), RgbEvent('test'));
+    expect(ChangeRgbEvent('test'), ChangeRgbEvent('test'));
   });
 }

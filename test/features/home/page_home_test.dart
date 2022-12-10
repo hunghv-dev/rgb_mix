@@ -6,6 +6,7 @@ import 'package:rgb_mix/data/clipboard.dart';
 import 'package:rgb_mix/features/copied/page_copied.dart';
 import 'package:rgb_mix/features/home/page_home.dart';
 import 'package:rgb_mix/features/home/widgets/button_process.dart';
+import 'package:rgb_mix/features/home/widgets/label_color/label_color_code.dart';
 import 'package:rgb_mix/resources/colors.dart';
 
 import '../../helpers/exts.dart';
@@ -48,6 +49,51 @@ void main() {
       await tester.drag(listSlider.at(2), const Offset(50, 0));
       await tester.pumpAndSettle();
       expect(tester.listLabelHexColor, isNot(['0', '0', '0', '0', '0', '0']));
+    });
+
+    testWidgets('drag label hex color up and down for value changed',
+        (tester) async {
+      final bloc = RgbBloc();
+      await tester.pumpPageHome(bloc);
+
+      /// red color label
+      final redLabelColorCode = find.byType(LabelColorCode).at(0);
+      await tester.ensureVisible(redLabelColorCode);
+      var firstLocation = tester.getCenter(redLabelColorCode);
+      var secondLocation = -firstLocation.translate(0, 1);
+      await tester.dragFrom(firstLocation, secondLocation);
+      await tester.pumpAndSettle();
+      expect(tester.listLabelHexColor, ['0', '1', '0', '0', '0', '0']);
+      secondLocation = firstLocation.translate(0, 1);
+      await tester.dragFrom(firstLocation, secondLocation);
+      await tester.pumpAndSettle();
+      expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '0']);
+
+      /// green color label
+      final greenLabelColorCode = find.byType(LabelColorCode).at(2);
+      await tester.ensureVisible(greenLabelColorCode);
+      firstLocation = tester.getCenter(greenLabelColorCode);
+      secondLocation = -firstLocation.translate(0, 1);
+      await tester.dragFrom(firstLocation, secondLocation);
+      await tester.pumpAndSettle();
+      expect(tester.listLabelHexColor, ['0', '0', '0', '1', '0', '0']);
+      secondLocation = firstLocation.translate(0, 1);
+      await tester.dragFrom(firstLocation, secondLocation);
+      await tester.pumpAndSettle();
+      expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '0']);
+
+      /// blue color label
+      final blueLabelColorCode = find.byType(LabelColorCode).at(4);
+      await tester.ensureVisible(blueLabelColorCode);
+      firstLocation = tester.getCenter(blueLabelColorCode);
+      secondLocation = -firstLocation.translate(0, 1);
+      await tester.dragFrom(firstLocation, secondLocation);
+      await tester.pumpAndSettle();
+      expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '1']);
+      secondLocation = firstLocation.translate(0, 1);
+      await tester.dragFrom(firstLocation, secondLocation);
+      await tester.pumpAndSettle();
+      expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '0']);
     });
 
     testWidgets(

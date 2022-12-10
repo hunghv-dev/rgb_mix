@@ -33,9 +33,27 @@ void main() {
       expect(LabelColorIndex.greenFirst.toColor, Colors.green);
       expect(LabelColorIndex.blueFirst.toColor, Colors.blue);
     });
+    test('getter labelColor', () {
+      expect(LabelColorIndex.redFirst.labelColor, LabelColor.red);
+      expect(LabelColorIndex.greenFirst.labelColor, LabelColor.green);
+      expect(LabelColorIndex.blueFirst.labelColor, LabelColor.blue);
+    });
   });
 
   group('Color type', () {
     test('getter invert', () => expect(Colors.black.invert, Colors.white));
+  });
+
+  group('DragUpdateDetails type', () {
+    test('getter isDragUp', () {
+      final details = DragUpdateDetails(
+          globalPosition: Offset.zero, delta: const Offset(0, -1));
+      expect(details.isDragUp, true);
+    });
+    test('getter isDragDown', () {
+      final details = DragUpdateDetails(
+          globalPosition: Offset.zero, delta: const Offset(0, 1));
+      expect(details.isDragDown, true);
+    });
   });
 }
