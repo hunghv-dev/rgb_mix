@@ -31,4 +31,7 @@ class StringResources {
     'E',
     'F'
   ];
+  static const String prefsTagRedColorCode = 'prefsTagRedColorCode';
+  static const String prefsTagGreenColorCode = 'prefsTagGreenColorCode';
+  static const String prefsTagBlueColorCode = 'prefsTagBlueColorCode';
 }

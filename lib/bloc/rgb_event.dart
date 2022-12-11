@@ -2,6 +2,8 @@ part of 'rgb_bloc.dart';
 
 class RgbEvent {}
 
+class InitRgbEvent extends RgbEvent {}
+
 class ChangeRgbEvent extends Equatable implements RgbEvent {
   final String value;
 

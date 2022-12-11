@@ -4,6 +4,7 @@ import 'package:rgb_mix/data/clipboard.dart';
 import 'package:rgb_mix/resources/enum.dart';
 import 'package:rgb_mix/resources/strings.dart';
 import 'package:rgb_mix/utils/ext.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'rgb_event.dart';
 
@@ -11,8 +12,11 @@ part 'rgb_state.dart';
 
 class RgbBloc extends Bloc<RgbEvent, RgbState> {
   final CopyClipboard clipboard;
+  final SharedPreferences sharedPreferences;
 
-  RgbBloc({required this.clipboard}) : super(const RgbState.init()) {
+  RgbBloc({required this.clipboard, required this.sharedPreferences})
+      : super(const RgbState.init()) {
+    on<InitRgbEvent>(onInitRgbEvent);
     on<ChangeRed>(onChangeRed);
     on<ChangeGreen>(onChangeGreen);
     on<ChangeBlue>(onChangeBlue);
@@ -20,6 +24,16 @@ class RgbBloc extends Bloc<RgbEvent, RgbState> {
     on<DecreaseRgbEvent>(onDecreaseRgbEvent);
     on<SetDataClipboardEvent>(onSetDataClipboardEvent);
     on<MixAgainEvent>(onMixAgainEvent);
+  }
+
+  void onInitRgbEvent(InitRgbEvent event, Emitter emit) async {
+    final red =
+        sharedPreferences.getString(StringResources.prefsTagRedColorCode);
+    final green =
+        sharedPreferences.getString(StringResources.prefsTagGreenColorCode);
+    final blue =
+        sharedPreferences.getString(StringResources.prefsTagBlueColorCode);
+    emit(state.copyWith(red: red, green: green, blue: blue));
   }
 
   void onChangeRed(ChangeRed event, Emitter emit) {
@@ -62,9 +76,15 @@ class RgbBloc extends Bloc<RgbEvent, RgbState> {
 
   void onSetDataClipboardEvent(
       SetDataClipboardEvent event, Emitter emit) async {
-    await clipboard
-        .setData(state.colorCopy)
-        .then((_) => emit(state.copyWith(isCopied: true)));
+    await Future.wait([
+      clipboard.setData(state.colorCopy),
+      sharedPreferences.setString(
+          StringResources.prefsTagRedColorCode, state.red),
+      sharedPreferences.setString(
+          StringResources.prefsTagGreenColorCode, state.green),
+      sharedPreferences.setString(
+          StringResources.prefsTagBlueColorCode, state.blue),
+    ]).then((_) => emit(state.copyWith(isCopied: true)));
   }
 
   void onMixAgainEvent(MixAgainEvent event, Emitter emit) {

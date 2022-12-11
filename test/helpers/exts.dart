@@ -9,16 +9,19 @@ import 'package:rgb_mix/resources/strings.dart';
 import 'package:rgb_mix/utils/di.dart';
 
 extension WidgetTesterExt on WidgetTester {
-  get pumpPageSplash => pumpWidget(
+  Future<void> pumpPageSplash(RgbBloc bloc) => pumpWidget(
         MaterialApp(
-          home: Di.providerPageSplash,
+          home: BlocProvider.value(
+            value: bloc,
+            child: Di.providerPageSplash,
+          ),
         ),
       );
 
   Future<void> pumpPageHome(RgbBloc bloc) => pumpWidget(
         MaterialApp(
-          home: BlocProvider(
-            create: (_) => bloc,
+          home: BlocProvider.value(
+            value: bloc,
             child: Di.providerPageHome,
           ),
         ),

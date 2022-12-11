@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bloc/rgb_bloc.dart';
 import '../data/clipboard.dart';
@@ -12,14 +13,20 @@ class Di {
 
   static CopyClipboard get providerCopyClipboard => CopyClipboard();
 
-  static RgbBloc get providerRgbBloc =>
-      RgbBloc(clipboard: providerCopyClipboard);
+  static Future<SharedPreferences> get providerSharedPreferences =>
+      SharedPreferences.getInstance();
+
+  static Future<RgbBloc> get providerRgbBloc async => RgbBloc(
+        clipboard: providerCopyClipboard,
+        sharedPreferences: await providerSharedPreferences,
+      );
 
   static PageHome get providerPageHome => const PageHome();
 
-  static MaterialPageRoute get providerPageHomeRouter => MaterialPageRoute(
-        builder: (_) => BlocProvider<RgbBloc>(
-          create: (_) => providerRgbBloc,
+  static MaterialPageRoute providerPageHomeRouter(RgbBloc bloc) =>
+      MaterialPageRoute(
+        builder: (_) => BlocProvider<RgbBloc>.value(
+          value: bloc,
           child: providerPageHome,
         ),
       );

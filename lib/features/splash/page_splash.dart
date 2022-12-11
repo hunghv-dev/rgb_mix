@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/features/splash/widgets/label_logo_app.dart';
 
 import '../../utils/di.dart';
@@ -14,15 +16,17 @@ class PageSplash extends StatefulWidget {
 class _PageSplashState extends State<PageSplash>
     with SingleTickerProviderStateMixin {
   late final AnimationController _rotationController;
+  late final RgbBloc bloc;
 
   void _animationStatusListener(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
-      Navigator.pushReplacement(context, Di.providerPageHomeRouter);
+      Navigator.pushReplacement(context, Di.providerPageHomeRouter(bloc));
     }
   }
 
   @override
   void initState() {
+    bloc = context.read<RgbBloc>();
     _rotationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,

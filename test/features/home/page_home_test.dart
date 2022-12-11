@@ -13,12 +13,17 @@ import '../../helpers/exts.dart';
 import '../../helpers/mocks.dart';
 
 void main() {
-  late RgbBloc bloc;
-  late CopyClipboard clipboard;
+  late final CopyClipboard clipboard;
+  late final MockSharedPreferences sharedPreferences;
+  late final RgbBloc bloc;
 
-  setUp(() {
-    bloc = MockRgbBloc();
+  setUpAll(() {
     clipboard = MockCopyClipboard();
+    sharedPreferences = MockSharedPreferences();
+    bloc = MockRgbBloc();
+    when(() => clipboard.setData(any())).thenAnswer((_) async => true);
+    when(() => sharedPreferences.setString(any(), any()))
+        .thenAnswer((_) async => true);
   });
 
   group('Page Home', () {
@@ -38,7 +43,8 @@ void main() {
     });
 
     testWidgets('drag slider for change label hex color', (tester) async {
-      final bloc = RgbBloc(clipboard: clipboard);
+      final bloc =
+          RgbBloc(clipboard: clipboard, sharedPreferences: sharedPreferences);
       await tester.pumpPageHome(bloc);
       final listSlider = find.byType(Slider);
       await tester.ensureVisible(listSlider.at(0));
@@ -53,7 +59,8 @@ void main() {
 
     testWidgets('drag label hex color up and down for value changed',
         (tester) async {
-      final bloc = RgbBloc(clipboard: clipboard);
+      final bloc =
+          RgbBloc(clipboard: clipboard, sharedPreferences: sharedPreferences);
       await tester.pumpPageHome(bloc);
 
       /// red color label
@@ -111,8 +118,8 @@ void main() {
 
     testWidgets('navigate to page copied when tap to Copy button',
         (tester) async {
-      when(() => clipboard.setData(any())).thenAnswer((_) async => true);
-      await tester.pumpPageHome(RgbBloc(clipboard: clipboard));
+      await tester.pumpPageHome(
+          RgbBloc(clipboard: clipboard, sharedPreferences: sharedPreferences));
       final finderButton = find.byType(ButtonProcess);
       await tester.ensureVisible(finderButton);
       await tester.tap(finderButton);
