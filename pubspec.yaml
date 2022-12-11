@@ -40,6 +40,13 @@ dependencies:
   mocktail: ^0.3.0
   device_preview: ^1.1.0
   shared_preferences: ^2.0.15
+  rename: ^2.0.1
+  flutter_launcher_icons: ^0.11.0
+
+flutter_icons:
+  image_path: "assets/images/icon.png"
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:

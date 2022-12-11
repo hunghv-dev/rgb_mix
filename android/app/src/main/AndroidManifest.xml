@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rgb_mix">
    <application
-        android:label="rgb_mix"
+        android:label="RGB Mix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
