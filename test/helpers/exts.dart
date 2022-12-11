@@ -15,14 +15,11 @@ extension WidgetTesterExt on WidgetTester {
         ),
       );
 
-  Future<void> pumpPageHome(RgbBloc bloc, [CopyClipboard? copyClipboard]) =>
-      pumpWidget(
+  Future<void> pumpPageHome(RgbBloc bloc) => pumpWidget(
         MaterialApp(
-          home: BlocProvider.value(
-            value: bloc,
-            child: PageHome(
-              clipboard: copyClipboard ?? CopyClipboard(bloc),
-            ),
+          home: BlocProvider(
+            create: (_) => bloc,
+            child: Di.providerPageHome,
           ),
         ),
       );

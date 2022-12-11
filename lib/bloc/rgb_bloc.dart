@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rgb_mix/data/clipboard.dart';
 import 'package:rgb_mix/resources/enum.dart';
 import 'package:rgb_mix/resources/strings.dart';
 import 'package:rgb_mix/utils/ext.dart';
@@ -9,12 +10,16 @@ part 'rgb_event.dart';
 part 'rgb_state.dart';
 
 class RgbBloc extends Bloc<RgbEvent, RgbState> {
-  RgbBloc() : super(const RgbState.init()) {
+  final CopyClipboard clipboard;
+
+  RgbBloc({required this.clipboard}) : super(const RgbState.init()) {
     on<ChangeRed>(onChangeRed);
     on<ChangeGreen>(onChangeGreen);
     on<ChangeBlue>(onChangeBlue);
     on<IncreaseRgbEvent>(onIncreaseRgbEvent);
     on<DecreaseRgbEvent>(onDecreaseRgbEvent);
+    on<SetDataClipboardEvent>(onSetDataClipboardEvent);
+    on<MixAgainEvent>(onMixAgainEvent);
   }
 
   void onChangeRed(ChangeRed event, Emitter emit) {
@@ -53,5 +58,16 @@ class RgbBloc extends Bloc<RgbEvent, RgbState> {
       return emit(state.copyWith(green: _decrease(state.greenValue)));
     }
     return emit(state.copyWith(blue: _decrease(state.blueValue)));
+  }
+
+  void onSetDataClipboardEvent(
+      SetDataClipboardEvent event, Emitter emit) async {
+    await clipboard
+        .setData(state.colorCopy)
+        .then((_) => emit(state.copyWith(isCopied: true)));
+  }
+
+  void onMixAgainEvent(MixAgainEvent event, Emitter emit) {
+    emit(state.copyWith(isCopied: false));
   }
 }

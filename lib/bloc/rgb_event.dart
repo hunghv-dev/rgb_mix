@@ -34,3 +34,7 @@ class DecreaseRgbEvent extends RgbEvent {
 
   DecreaseRgbEvent(this.color);
 }
+
+class SetDataClipboardEvent extends RgbEvent {}
+
+class MixAgainEvent extends RgbEvent {}

@@ -12,7 +12,7 @@ void main() async {
   );
   runApp(
     DevicePreview(
-      enabled: true,
+      enabled: false,
       tools: const [...DevicePreview.defaultTools],
       builder: (context) => const App(),
     ),

@@ -38,7 +38,7 @@ void main() {
     });
 
     testWidgets('drag slider for change label hex color', (tester) async {
-      final bloc = RgbBloc();
+      final bloc = RgbBloc(clipboard: clipboard);
       await tester.pumpPageHome(bloc);
       final listSlider = find.byType(Slider);
       await tester.ensureVisible(listSlider.at(0));
@@ -53,7 +53,7 @@ void main() {
 
     testWidgets('drag label hex color up and down for value changed',
         (tester) async {
-      final bloc = RgbBloc();
+      final bloc = RgbBloc(clipboard: clipboard);
       await tester.pumpPageHome(bloc);
 
       /// red color label
@@ -99,7 +99,8 @@ void main() {
     testWidgets(
         'change state to ADB0B2 and after: LabelHexColor: #ADB0B2 CircleAvatar color: Colors.grey',
         (tester) async {
-      when(() => bloc.state).thenReturn(const RgbState('AD', 'B0', 'B2'));
+      when(() => bloc.state)
+          .thenReturn(const RgbState('AD', 'B0', 'B2', false));
       await tester.pumpPageHome(bloc);
       expect(tester.listLabelHexColor, ['A', 'D', 'B', '0', 'B', '2']);
       expect(
@@ -110,9 +111,8 @@ void main() {
 
     testWidgets('navigate to page copied when tap to Copy button',
         (tester) async {
-      when(() => bloc.state).thenReturn(const RgbState.init());
-      when(() => clipboard.setData).thenAnswer((_) async => true);
-      await tester.pumpPageHome(bloc, clipboard);
+      when(() => clipboard.setData(any())).thenAnswer((_) async => true);
+      await tester.pumpPageHome(RgbBloc(clipboard: clipboard));
       final finderButton = find.byType(ButtonProcess);
       await tester.ensureVisible(finderButton);
       await tester.tap(finderButton);
