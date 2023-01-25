@@ -6,6 +6,13 @@
 ![test](https://github.com/hunghv-dev/rgb_mix/actions/workflows/test.yml/badge.svg)
 ![codecov](https://codecov.io/gh/hunghv-dev/rgb_mix/branch/develop/graph/badge.svg?token=qzFRFZTevc)
 
+<p align="left">
+<a href="https://play.google.com/store/apps/details?id=com.zoyodev.rgbmix">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
+
 RBG mix app build with Flutter
 
 ## Installation
