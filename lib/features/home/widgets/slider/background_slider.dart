@@ -6,12 +6,14 @@ import '../../../../resources/colors.dart';
 
 class BackgroundSlider extends StatelessWidget {
   final VoidCallback? onHeroAnimationComplete;
+  final VoidCallback? onHeroAnimationReverse;
   final double width;
   final double height;
 
   const BackgroundSlider({
     Key? key,
     this.onHeroAnimationComplete,
+    this.onHeroAnimationReverse,
     this.width = double.infinity,
     this.height = 250,
   }) : super(key: key);
@@ -28,6 +30,9 @@ class BackgroundSlider extends StatelessWidget {
         animation.addStatusListener((status) {
           if (status == AnimationStatus.completed) {
             onHeroAnimationComplete?.call();
+          }
+          if (status == AnimationStatus.dismissed) {
+            onHeroAnimationReverse?.call();
           }
         });
         return context.widget;

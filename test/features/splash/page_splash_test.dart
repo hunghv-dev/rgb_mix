@@ -1,38 +1,38 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rgb_mix/bloc/rgb_bloc.dart';
-import 'package:rgb_mix/features/home/page_home.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:rgb_mix/features/splash/page_splash.dart';
 import 'package:rgb_mix/features/splash/widgets/label_logo_app.dart';
 import 'package:rgb_mix/features/splash/widgets/logo_circle_white.dart';
-import 'package:rgb_mix/utils/di.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../helpers/exts.dart';
+import '../../helpers/helpers.dart';
 
 void main() {
-  late final RgbBloc bloc;
+  late MockNavigator navigator;
 
-  setUpAll(() async {
-    SharedPreferences.setMockInitialValues({});
-    bloc = await Di.providerRgbBloc;
+  setUp(() async {
+    navigator = MockNavigator();
+    when(() => navigator.pushNamed(any())).thenAnswer((_) async {});
   });
 
   group('Page Splash', () {
-    testWidgets('visible with LogoCircleWhite, LabelLogoApp widget',
+    testWidgets('start => visible: LogoCircleWhite, LabelLogoApp',
         (tester) async {
-      await tester.pumpPageSplash(bloc);
+      await tester.pumpApp(child: const PageSplash());
       expect(find.byType(LogoCircleWhite), findsOneWidget);
       expect(find.byType(LabelLogoApp), findsOneWidget);
-      await tester.pumpAndSettle();
-      expect(find.byType(PageSplash), findsNothing);
     });
 
-    testWidgets('exit after complete of animation', (tester) async {
-      await tester.pumpPageSplash(bloc);
-      expect(find.byType(PageSplash), findsOneWidget);
-      await tester.pumpAndSettle();
-      expect(find.byType(PageSplash), findsNothing);
-      expect(find.byType(PageHome), findsOneWidget);
-    });
+    testWidgets(
+      'complete of animation => navigate',
+      (tester) async {
+        await tester.pumpApp(
+          child: const PageSplash(),
+          navigator: navigator,
+        );
+        expect(find.byType(PageSplash), findsOneWidget);
+        await tester.pumpAndSettle();
+        verify(() => navigator.pushNamed(any())).called(1);
+      },
+    );
   });
 }

@@ -8,12 +8,11 @@ import 'package:rgb_mix/utils/ext.dart';
 class LabelColorCode extends StatelessWidget {
   final double height;
   final double width;
-  late final ScrollController _scrollController;
   final double fontSizeLabel;
   final int duration;
   final LabelColorIndex index;
 
-  LabelColorCode({
+  const LabelColorCode({
     Key? key,
     this.height = 50.0,
     this.width = 28.0,
@@ -28,14 +27,14 @@ class LabelColorCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController = ScrollController(
+    final scrollController = ScrollController(
       initialScrollOffset: _scrollIndex(context.read<RgbBloc>().state),
     );
     return BlocListener<RgbBloc, RgbState>(
       listener: (_, state) {
         final scrollIndex = _scrollIndex(state);
-        if (_scrollController.offset == scrollIndex) return;
-        _scrollController.animateTo(
+        if (scrollController.offset == scrollIndex) return;
+        scrollController.animateTo(
           scrollIndex,
           duration: Duration(milliseconds: duration),
           curve: Curves.linear,
@@ -47,7 +46,7 @@ class LabelColorCode extends StatelessWidget {
         alignment: Alignment.center,
         child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          controller: _scrollController,
+          controller: scrollController,
           child: Column(
             children: StringResources.listHexString
                 .map(

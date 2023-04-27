@@ -27,7 +27,11 @@ class _TestBackgroundSliderState extends State<TestBackgroundSlider> {
     return Scaffold(
       body: InkWell(
           onTap: () => setState(() => state = true),
-          child: BackgroundSlider(height: state ? 250 : 300)),
+          child: BackgroundSlider(
+            height: state ? 250 : 300,
+            onHeroAnimationComplete: () {},
+            onHeroAnimationReverse: () {},
+          )),
     );
   }
 }

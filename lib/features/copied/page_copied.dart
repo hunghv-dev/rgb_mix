@@ -6,6 +6,7 @@ import '../home/widgets/button_process.dart';
 import '../splash/widgets/label_logo_app.dart';
 
 class PageCopied extends StatelessWidget {
+  static const route = '/copied';
   const PageCopied({Key? key}) : super(key: key);
 
   @override

@@ -5,7 +5,7 @@ import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/data/clipboard.dart';
 import 'package:rgb_mix/resources/enum.dart';
 
-import '../helpers/mocks.dart';
+import '../helpers/helpers.dart';
 
 void main() {
   late final CopyClipboard clipboard;

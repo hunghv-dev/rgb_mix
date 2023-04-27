@@ -4,9 +4,7 @@ import 'package:rgb_mix/resources/strings.dart';
 class LabelLogoApp extends StatelessWidget {
   final double fontSize;
 
-  const LabelLogoApp({
-    this.fontSize = 40,
-  });
+  const LabelLogoApp({Key? key, this.fontSize = 40}) : super(key: key);
 
   WidgetSpan _widgetSpan(String label, Color color, {bool endText = false}) =>
       WidgetSpan(

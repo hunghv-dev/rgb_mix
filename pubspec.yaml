@@ -42,6 +42,7 @@ dependencies:
   shared_preferences: ^2.0.15
   rename: ^2.0.1
   flutter_launcher_icons: ^0.11.0
+  mockingjay: ^0.3.0
 
 flutter_icons:
   image_path: "assets/images/icon.png"

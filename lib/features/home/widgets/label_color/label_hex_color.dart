@@ -36,7 +36,6 @@ class _LabelHexColorState extends State<LabelHexColor> {
               alignment: PlaceholderAlignment.middle,
               child: GestureDetector(
                   onPanUpdate: (details) {
-                    _isScrollUp = null;
                     if (details.isDragUp) {
                       setState(() => _isScrollUp = true);
                     }
@@ -51,6 +50,7 @@ class _LabelHexColorState extends State<LabelHexColor> {
                               ? IncreaseRgbEvent(e.labelColor)
                               : DecreaseRgbEvent(e.labelColor),
                         );
+                    _isScrollUp = null;
                   },
                   child: LabelColorCode(index: e)),
             ),

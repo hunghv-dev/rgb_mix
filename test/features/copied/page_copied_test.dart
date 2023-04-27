@@ -5,8 +5,7 @@ import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/features/copied/page_copied.dart';
 import 'package:rgb_mix/features/home/widgets/button_process.dart';
 
-import '../../helpers/exts.dart';
-import '../../helpers/mocks.dart';
+import '../../helpers/helpers.dart';
 
 void main() {
   late RgbBloc bloc;
@@ -20,7 +19,7 @@ void main() {
         'start with LabelHexColor: #000000, CircleAvatar color: Colors.black',
         (tester) async {
       when(() => bloc.state).thenReturn(const RgbState.init());
-      await tester.pumpPageCopied(bloc);
+      await tester.pumpApp(bloc: bloc, child: const PageCopied());
       expect(tester.listLabelHexColor, ['0', '0', '0', '0', '0', '0']);
       expect(
           (tester.widget<CircleAvatar>(find.byType(CircleAvatar)))
@@ -30,7 +29,7 @@ void main() {
 
     testWidgets('pop back when tap to MixAgain button', (tester) async {
       when(() => bloc.state).thenReturn(const RgbState.init());
-      await tester.pumpPageCopied(bloc);
+      await tester.pumpApp(bloc: bloc, child: const PageCopied());
       final finderButton = find.byType(ButtonProcess);
       await tester.ensureVisible(finderButton);
       await tester.tap(finderButton);

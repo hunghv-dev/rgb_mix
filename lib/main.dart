@@ -2,25 +2,33 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rgb_mix/bloc/rgb_bloc.dart';
+import 'package:rgb_mix/features/overview/page_overview.dart';
 import 'package:rgb_mix/resources/colors.dart';
 import 'package:rgb_mix/resources/strings.dart';
-import 'package:rgb_mix/utils/di.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'bloc/rgb_bloc.dart';
+import 'data/clipboard.dart';
+import 'features/copied/page_copied.dart';
+import 'features/home/page_home.dart';
+import 'features/splash/page_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: ColorResources.bg));
-  await SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp],
+    const SystemUiOverlayStyle(statusBarColor: ColorResources.bg),
   );
-  final bloc = await Di.providerRgbBloc;
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  final bloc = RgbBloc(
+    clipboard: CopyClipboard(),
+    sharedPreferences: await SharedPreferences.getInstance(),
+  );
   runApp(
     DevicePreview(
       enabled: false,
       tools: const [...DevicePreview.defaultTools],
       builder: (context) => BlocProvider(
-        create: (_) => bloc..add(InitRgbEvent()),
+        create: (_) => bloc,
         child: const App(),
       ),
     ),
@@ -35,6 +43,13 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: StringResources.appName,
+      routes: {
+        PageSplash.route: (context) => const PageSplash(),
+        PageHome.route: (context) => const PageHome(),
+        PageCopied.route: (context) => const PageCopied(),
+        PageOverview.route: (context) => const PageOverview(),
+      },
+      initialRoute: PageSplash.route,
       theme: ThemeData(
           scaffoldBackgroundColor: ColorResources.bg,
           pageTransitionsTheme: const PageTransitionsTheme(
@@ -43,7 +58,6 @@ class App extends StatelessWidget {
               TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
             },
           )),
-      home: Di.providerPageSplash,
     );
   }
 }

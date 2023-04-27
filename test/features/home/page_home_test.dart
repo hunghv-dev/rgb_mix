@@ -1,23 +1,26 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/data/clipboard.dart';
-import 'package:rgb_mix/features/copied/page_copied.dart';
 import 'package:rgb_mix/features/home/page_home.dart';
 import 'package:rgb_mix/features/home/widgets/button_process.dart';
 import 'package:rgb_mix/features/home/widgets/label_color/label_color_code.dart';
 import 'package:rgb_mix/resources/colors.dart';
+import 'package:rgb_mix/resources/strings.dart';
 
-import '../../helpers/exts.dart';
-import '../../helpers/mocks.dart';
+import '../../helpers/helpers.dart';
 
 void main() {
-  late final CopyClipboard clipboard;
-  late final MockSharedPreferences sharedPreferences;
-  late final RgbBloc bloc;
+  late CopyClipboard clipboard;
+  late MockSharedPreferences sharedPreferences;
+  late RgbBloc bloc;
+  late MockNavigator navigator;
 
-  setUpAll(() {
+  setUp(() {
+    navigator = MockNavigator();
+    when(() => navigator.pushNamed(any())).thenAnswer((_) async {});
     clipboard = MockCopyClipboard();
     sharedPreferences = MockSharedPreferences();
     bloc = MockRgbBloc();
@@ -31,7 +34,7 @@ void main() {
         'start with 3 SliderLine value: 0, LabelHexColor: #000000, CircleAvatar color: Colors.black',
         (tester) async {
       when(() => bloc.state).thenReturn(const RgbState.init());
-      await tester.pumpPageHome(bloc);
+      await tester.pumpApp(bloc: bloc, child: const PageHome());
       expect(
           (tester.widgetList<Slider>(find.byType(Slider))).map((e) => e.value),
           [0, 0, 0]);
@@ -45,7 +48,7 @@ void main() {
     testWidgets('drag slider for change label hex color', (tester) async {
       final bloc =
           RgbBloc(clipboard: clipboard, sharedPreferences: sharedPreferences);
-      await tester.pumpPageHome(bloc);
+      await tester.pumpApp(bloc: bloc, child: const PageHome());
       final listSlider = find.byType(Slider);
       await tester.ensureVisible(listSlider.at(0));
       await tester.drag(listSlider.at(0), const Offset(50, 0));
@@ -61,7 +64,7 @@ void main() {
         (tester) async {
       final bloc =
           RgbBloc(clipboard: clipboard, sharedPreferences: sharedPreferences);
-      await tester.pumpPageHome(bloc);
+      await tester.pumpApp(bloc: bloc, child: const PageHome());
 
       /// red color label
       final redLabelColorCode = find.byType(LabelColorCode).at(1);
@@ -108,7 +111,7 @@ void main() {
         (tester) async {
       when(() => bloc.state)
           .thenReturn(const RgbState('AD', 'B0', 'B2', false));
-      await tester.pumpPageHome(bloc);
+      await tester.pumpApp(bloc: bloc, child: const PageHome());
       expect(tester.listLabelHexColor, ['A', 'D', 'B', '0', 'B', '2']);
       expect(
           (tester.widget<CircleAvatar>(find.byType(CircleAvatar)))
@@ -116,16 +119,40 @@ void main() {
           ColorResources.grey);
     });
 
-    testWidgets('navigate to page copied when tap to Copy button',
-        (tester) async {
-      await tester.pumpPageHome(
-          RgbBloc(clipboard: clipboard, sharedPreferences: sharedPreferences));
-      final finderButton = find.byType(ButtonProcess);
-      await tester.ensureVisible(finderButton);
-      await tester.tap(finderButton);
-      await tester.pumpAndSettle();
-      expect(find.byType(PageHome), findsNothing);
-      expect(find.byType(PageCopied), findsOneWidget);
-    });
+    testWidgets(
+      'Tap Copy button => navigate',
+      (tester) async {
+        await tester.pumpApp(
+          bloc: RgbBloc(
+              clipboard: clipboard, sharedPreferences: sharedPreferences),
+          child: const PageHome(),
+          navigator: navigator,
+        );
+        final finderButton = find.byType(ButtonProcess);
+        await tester.ensureVisible(finderButton);
+        await tester.tap(finderButton);
+        await tester.pumpAndSettle();
+        verify(() => navigator.pushNamed(any())).called(1);
+      },
+    );
+
+    testWidgets(
+      'Double Tap Copy button => navigate',
+      (tester) async {
+        await tester.pumpApp(
+          bloc: RgbBloc(
+              clipboard: clipboard, sharedPreferences: sharedPreferences),
+          child: const PageHome(),
+          navigator: navigator,
+        );
+        final finderButton =
+            find.byKey(ValueKey(StringResources.testKeyNavigateOverview));
+        await tester.tap(finderButton);
+        await tester.pump(kDoubleTapMinTime);
+        await tester.tap(finderButton);
+        await tester.pumpAndSettle();
+        verify(() => navigator.pushNamed(any())).called(1);
+      },
+    );
   });
 }

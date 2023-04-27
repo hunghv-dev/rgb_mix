@@ -11,6 +11,8 @@ class StringResources {
   static const String heroTagLogo = 'hero_tag_logo';
   static const String heroTagCircle = 'hero_tag_circle';
   static const String heroTagPanel = 'hero_tag_panel';
+  static const String heroTagOverview = 'hero_tag_overview';
+  static const String testKeyNavigateOverview = 'test_key_navigate_overview';
   static const String textColorCodeZero = '00';
   static const String textColorCodeFF = 'FF';
   static const listHexString = [

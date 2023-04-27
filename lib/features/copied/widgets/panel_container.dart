@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rgb_mix/features/home/widgets/slider/background_slider.dart';
 
+import '../../../bloc/rgb_bloc.dart';
 import 'container_info.dart';
 
 class PanelContainer extends StatefulWidget {
@@ -35,10 +37,16 @@ class _PanelContainerState extends State<PanelContainer>
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<RgbBloc>();
     return Stack(
       children: [
         BackgroundSlider(
-          onHeroAnimationComplete: () => _zoomController.forward(),
+          onHeroAnimationComplete: () {
+            _zoomController.forward();
+          },
+          onHeroAnimationReverse: () {
+            bloc.add(MixAgainEvent());
+          },
         ),
         ContainerInfo(
           zoomAnimation: _zoomAnimation,

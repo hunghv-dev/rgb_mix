@@ -48,6 +48,14 @@ extension LabelColorIndexExt on LabelColorIndex {
   }
 }
 
+extension LabelColorExt on LabelColor {
+  bool get isRed => this == LabelColor.red;
+
+  bool get isGreen => this == LabelColor.green;
+
+  bool get isBlue => this == LabelColor.blue;
+}
+
 extension ColorExt on Color {
   Color get invert => Color.fromARGB(
         (opacity * 255).round(),

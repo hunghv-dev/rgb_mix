@@ -4,6 +4,8 @@ import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/features/home/widgets/color_overview/red.dart';
 import 'package:rgb_mix/utils/ext.dart';
 
+import '../../../overview/page_overview.dart';
+import '../../../../resources/strings.dart';
 import 'blue.dart';
 import 'green.dart';
 
@@ -22,16 +24,6 @@ class ColorOverview extends StatelessWidget {
       dimension: size,
       child: Stack(
         children: [
-          Center(
-            child: BlocBuilder<RgbBloc, RgbState>(
-              builder: (_, state) {
-                return CircleAvatar(
-                  backgroundColor: state.color.toColor,
-                  radius: size / 4,
-                );
-              },
-            ),
-          ),
           BlocBuilder<RgbBloc, RgbState>(
             builder: (context, state) {
               return Red(
@@ -58,6 +50,25 @@ class ColorOverview extends StatelessWidget {
                 strokeWidth: strokeWidth,
               );
             },
+          ),
+          Center(
+            child: GestureDetector(
+              key: ValueKey(StringResources.testKeyNavigateOverview),
+              onDoubleTap: () {
+                Navigator.pushNamed(context, PageOverview.route);
+              },
+              child: BlocBuilder<RgbBloc, RgbState>(
+                builder: (context, state) {
+                  return Hero(
+                    tag: StringResources.heroTagOverview,
+                    child: CircleAvatar(
+                      backgroundColor: state.color.toColor,
+                      radius: size / 4,
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),

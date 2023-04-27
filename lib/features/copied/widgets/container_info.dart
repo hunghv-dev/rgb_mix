@@ -27,10 +27,10 @@ class ContainerInfo extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ScaleTransition(
-            scale: zoomAnimation,
-            child: BlocBuilder<RgbBloc, RgbState>(builder: (_, state) {
-              return CircleAvatar(
+          BlocBuilder<RgbBloc, RgbState>(builder: (_, state) {
+            return ScaleTransition(
+              scale: zoomAnimation,
+              child: CircleAvatar(
                 backgroundColor: state.color.toColor,
                 radius: height / 6,
                 child: Icon(
@@ -38,9 +38,9 @@ class ContainerInfo extends StatelessWidget {
                   color: state.color.toColor.invert,
                   size: height / 6,
                 ),
-              );
-            }),
-          ),
+              ),
+            );
+          }),
           const SizedBox(height: 30),
           ScaleTransition(scale: zoomAnimation, child: const LabelHexColor()),
           const SizedBox(height: 10),

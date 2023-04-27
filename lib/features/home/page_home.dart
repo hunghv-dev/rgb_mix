@@ -7,24 +7,23 @@ import 'package:rgb_mix/features/home/widgets/slider/background_slider.dart';
 import 'package:rgb_mix/features/home/widgets/slider/slider_progress.dart';
 import 'package:rgb_mix/resources/strings.dart';
 
-import '../../utils/di.dart';
+import '../copied/page_copied.dart';
 import '../splash/widgets/label_logo_app.dart';
 import '../splash/widgets/logo_circle_white.dart';
 import 'widgets/button_process.dart';
 
 class PageHome extends StatelessWidget {
+  static const route = '/home';
+
   const PageHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<RgbBloc>();
+    final bloc = context.read<RgbBloc>()..add(InitRgbEvent());
     return BlocListener<RgbBloc, RgbState>(
       listener: (context, state) {
         if (state.isCopied) {
-          Navigator.push(
-            context,
-            Di.providerPageCopiedRouter(bloc),
-          ).then((_) => bloc.add(MixAgainEvent()));
+          Navigator.pushNamed(context, PageCopied.route);
         }
       },
       child: Scaffold(
@@ -56,13 +55,28 @@ class PageHome extends StatelessWidget {
                           const LabelHexColor(),
                           const SizedBox(height: 35),
                           Stack(
-                            children: const [
-                              BackgroundSlider(),
+                            children: [
+                              const BackgroundSlider(),
                               Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 15,
-                                  child: SliderProgress())
+                                left: 0,
+                                right: 0,
+                                bottom: 15,
+                                child: BlocSelector<RgbBloc, RgbState, bool>(
+                                  selector: (state) => state.isCopied,
+                                  builder: (_, isCopied) {
+                                    return AnimatedOpacity(
+                                      duration:
+                                          const Duration(milliseconds: 50),
+                                      opacity: isCopied ? 0 : 1,
+                                      child: AnimatedScale(
+                                          duration:
+                                              const Duration(milliseconds: 50),
+                                          scale: isCopied ? 1.1 : 1.0,
+                                          child: const SliderProgress()),
+                                    );
+                                  },
+                                ),
+                              )
                             ],
                           ),
                         ],
@@ -71,7 +85,9 @@ class PageHome extends StatelessWidget {
                   ),
                   ButtonProcess(
                     label: StringResources.labelButtonCopy,
-                    onTap: () => bloc.add(SetDataClipboardEvent()),
+                    onTap: () {
+                      bloc.add(SetDataClipboardEvent());
+                    },
                   ),
                   const SizedBox(height: 30),
                 ],

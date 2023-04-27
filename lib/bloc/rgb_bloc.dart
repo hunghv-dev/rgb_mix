@@ -26,7 +26,7 @@ class RgbBloc extends Bloc<RgbEvent, RgbState> {
     on<MixAgainEvent>(onMixAgainEvent);
   }
 
-  void onInitRgbEvent(InitRgbEvent event, Emitter emit) async {
+  void onInitRgbEvent(InitRgbEvent event, Emitter emit) {
     final red =
         sharedPreferences.getString(StringResources.prefsTagRedColorCode);
     final green =
@@ -52,26 +52,30 @@ class RgbBloc extends Bloc<RgbEvent, RgbState> {
       value < 255 ? (value + 1).hex.toUpperCase() : null;
 
   void onIncreaseRgbEvent(IncreaseRgbEvent event, Emitter emit) {
-    if (event.color == LabelColor.red) {
+    if (event.color.isRed) {
       return emit(state.copyWith(red: _increase(state.redValue)));
     }
-    if (event.color == LabelColor.green) {
+    if (event.color.isGreen) {
       return emit(state.copyWith(green: _increase(state.greenValue)));
     }
-    return emit(state.copyWith(blue: _increase(state.blueValue)));
+    if (event.color.isBlue) {
+      return emit(state.copyWith(blue: _increase(state.blueValue)));
+    }
   }
 
   String? _decrease(double value) =>
       value > 0 ? (value - 1).hex.toUpperCase() : null;
 
   void onDecreaseRgbEvent(DecreaseRgbEvent event, Emitter emit) {
-    if (event.color == LabelColor.red) {
+    if (event.color.isRed) {
       return emit(state.copyWith(red: _decrease(state.redValue)));
     }
-    if (event.color == LabelColor.green) {
+    if (event.color.isGreen) {
       return emit(state.copyWith(green: _decrease(state.greenValue)));
     }
-    return emit(state.copyWith(blue: _decrease(state.blueValue)));
+    if (event.color.isBlue) {
+      return emit(state.copyWith(blue: _decrease(state.blueValue)));
+    }
   }
 
   void onSetDataClipboardEvent(

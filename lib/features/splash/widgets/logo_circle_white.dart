@@ -7,10 +7,8 @@ class LogoCircleWhite extends StatelessWidget {
   final double size;
   final double strokeWidth;
 
-  const LogoCircleWhite({
-    this.size = 60,
-    this.strokeWidth = 20,
-  });
+  const LogoCircleWhite({Key? key, this.size = 60, this.strokeWidth = 20})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +27,7 @@ class LogoCircleWhite extends StatelessWidget {
 class Painter extends CustomPainter {
   final double strokeWidth;
 
-  Painter({
-    required this.strokeWidth,
-  });
+  Painter({required this.strokeWidth});
 
   void _drawArc(Canvas canvas, Size size, int startAngle, int sweepAngle) {
     final paint = Paint()
@@ -58,7 +54,5 @@ class Painter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
