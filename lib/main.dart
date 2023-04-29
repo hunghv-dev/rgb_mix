@@ -6,6 +6,7 @@ import 'package:rgb_mix/features/overview/page_overview.dart';
 import 'package:rgb_mix/resources/colors.dart';
 import 'package:rgb_mix/resources/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:statusbarz/statusbarz.dart';
 
 import 'bloc/rgb_bloc.dart';
 import 'data/clipboard.dart';
@@ -15,9 +16,6 @@ import 'features/splash/page_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarColor: ColorResources.bg),
-  );
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final bloc = RgbBloc(
     clipboard: CopyClipboard(),
@@ -40,24 +38,27 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: StringResources.appName,
-      routes: {
-        PageSplash.route: (context) => const PageSplash(),
-        PageHome.route: (context) => const PageHome(),
-        PageCopied.route: (context) => const PageCopied(),
-        PageOverview.route: (context) => const PageOverview(),
-      },
-      initialRoute: PageSplash.route,
-      theme: ThemeData(
-          scaffoldBackgroundColor: ColorResources.bg,
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: ZoomPageTransitionsBuilder(),
-              TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
-            },
-          )),
+    return StatusbarzCapturer(
+      child: MaterialApp(
+        navigatorObservers: [Statusbarz.instance.observer],
+        debugShowCheckedModeBanner: false,
+        title: StringResources.appName,
+        routes: {
+          PageSplash.route: (context) => const PageSplash(),
+          PageHome.route: (context) => const PageHome(),
+          PageCopied.route: (context) => const PageCopied(),
+          PageOverview.route: (context) => const PageOverview(),
+        },
+        initialRoute: PageSplash.route,
+        theme: ThemeData(
+            scaffoldBackgroundColor: ColorResources.bg,
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+              },
+            )),
+      ),
     );
   }
 }
