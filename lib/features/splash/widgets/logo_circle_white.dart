@@ -3,25 +3,20 @@ import 'package:rgb_mix/utils/ext.dart';
 
 import '../../../resources/strings.dart';
 
-class LogoCircleWhite extends StatelessWidget {
+class LogoCircle extends StatelessWidget {
   final double size;
   final double strokeWidth;
 
-  const LogoCircleWhite({Key? key, this.size = 60, this.strokeWidth = 20})
-      : super(key: key);
+  const LogoCircle({super.key, this.size = 60, this.strokeWidth = 20});
 
   @override
-  Widget build(BuildContext context) {
-    return Hero(
-      tag: StringResources.heroTagCircle,
-      child: CustomPaint(
-        painter: Painter(
-          strokeWidth: strokeWidth,
+  Widget build(BuildContext context) => Hero(
+        tag: StringResources.heroTagCircle,
+        child: CustomPaint(
+          painter: Painter(strokeWidth: strokeWidth),
+          size: Size.square(size),
         ),
-        size: Size.square(size),
-      ),
-    );
-  }
+      );
 }
 
 class Painter extends CustomPainter {
@@ -29,12 +24,13 @@ class Painter extends CustomPainter {
 
   Painter({required this.strokeWidth});
 
-  void _drawArc(Canvas canvas, Size size, int startAngle, int sweepAngle) {
+  void _drawArc(
+      Canvas canvas, Size size, int startAngle, int sweepAngle, Color color) {
     final paint = Paint()
       ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..color = Colors.white;
+      ..color = color;
 
     canvas.drawArc(
         Rect.fromCircle(
@@ -48,9 +44,9 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    _drawArc(canvas, size, 0, 60);
-    _drawArc(canvas, size, 120, 60);
-    _drawArc(canvas, size, 240, 60);
+    _drawArc(canvas, size, 0, 60, Colors.red);
+    _drawArc(canvas, size, 120, 60, Colors.green);
+    _drawArc(canvas, size, 240, 60, Colors.blue);
   }
 
   @override

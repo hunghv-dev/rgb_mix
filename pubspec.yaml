@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+3
 
 environment:
-  sdk: ">=2.17.3 <3.0.0"
+  sdk: '>=2.19.6 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,6 +30,17 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Base define package
+  base_define:
+    git:
+      url: https://github.com/hunghv-dev/base_define.git
+      ref: master
+
+  # Base ui package
+  base_ui:
+    git:
+      url: https://github.com/hunghv-dev/base_ui.git
+      ref: master
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -44,6 +55,11 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   mockingjay: ^0.3.0
   statusbarz: ^1.0.12
+  freezed_annotation: ^2.4.1
+  injectable: ^2.1.2
+  get_it: ^7.6.0
+  auto_route: ^6.4.0
+  collection: ^1.17.0
 
 flutter_icons:
   image_path: "assets/images/icon.png"
@@ -60,6 +76,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
+  freezed: ^2.4.1
+  injectable_generator: ^2.1.6
+  auto_route_generator: ^6.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

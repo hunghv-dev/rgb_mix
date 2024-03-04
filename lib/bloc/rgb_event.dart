@@ -1,42 +1,19 @@
 part of 'rgb_bloc.dart';
 
-class RgbEvent {}
+@freezed
+class RgbEvent with _$RgbEvent {
+  const factory RgbEvent.init() = _Init;
 
-class InitRgbEvent extends RgbEvent {}
+  const factory RgbEvent.changeRed(String value) = _ChangeRed;
 
-class ChangeRgbEvent extends Equatable implements RgbEvent {
-  final String value;
+  const factory RgbEvent.changeGreen(String value) = _ChangeGreen;
 
-  const ChangeRgbEvent(this.value);
+  const factory RgbEvent.changeBlue(String value) = _ChangeBlue;
 
-  @override
-  List<Object?> get props => [value];
+  const factory RgbEvent.touch(ColorLabel color, {required bool increase}) =
+      _Touch;
+
+  const factory RgbEvent.setClipboard() = _SetClipboard;
+
+  const factory RgbEvent.mixAgain() = _MixAgain;
 }
-
-class ChangeRed extends ChangeRgbEvent {
-  const ChangeRed(super.value);
-}
-
-class ChangeGreen extends ChangeRgbEvent {
-  const ChangeGreen(super.value);
-}
-
-class ChangeBlue extends ChangeRgbEvent {
-  const ChangeBlue(super.value);
-}
-
-class IncreaseRgbEvent extends RgbEvent {
-  final LabelColor color;
-
-  IncreaseRgbEvent(this.color);
-}
-
-class DecreaseRgbEvent extends RgbEvent {
-  final LabelColor color;
-
-  DecreaseRgbEvent(this.color);
-}
-
-class SetDataClipboardEvent extends RgbEvent {}
-
-class MixAgainEvent extends RgbEvent {}

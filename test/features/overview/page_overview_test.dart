@@ -3,25 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:rgb_mix/bloc/rgb_bloc.dart';
-import 'package:rgb_mix/features/overview/page_overview.dart';
+import 'package:rgb_mix/features/overview/overview_page.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
-  late MockNavigator navigator;
   late RgbBloc bloc;
+  late MockStackRouter mockStackRouter;
+
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
+  });
 
   setUp(() async {
-    navigator = MockNavigator();
-    when(() => navigator.pop()).thenAnswer((_) async {});
     bloc = MockRgbBloc();
-    when(() => bloc.state).thenReturn(const RgbState.init());
+    mockStackRouter = MockStackRouter();
+    when(() => bloc.state).thenReturn(const RgbState());
   });
 
   group('Page Overview', () {
     testWidgets('start => visible: PageOverview', (tester) async {
-      await tester.pumpApp(bloc: bloc, child: const PageOverview());
-      expect(find.byType(PageOverview), findsOneWidget);
+      await tester.pumpApp(bloc: bloc, child: const OverviewPage());
+      expect(find.byType(OverviewPage), findsOneWidget);
     });
 
     testWidgets(
@@ -29,8 +32,8 @@ void main() {
       (tester) async {
         await tester.pumpApp(
           bloc: bloc,
-          child: const PageOverview(),
-          navigator: navigator,
+          child: const OverviewPage(),
+          mockStackRouter: mockStackRouter,
         );
         final finderButton = find.byType(GestureDetector);
         await tester.ensureVisible(finderButton);
@@ -38,7 +41,7 @@ void main() {
         await tester.pump(kDoubleTapMinTime);
         await tester.tap(finderButton);
         await tester.pumpAndSettle();
-        verify(() => navigator.pop()).called(1);
+        verify(() => mockStackRouter.pop()).called(1);
       },
     );
   });

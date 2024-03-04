@@ -1,5 +1,4 @@
 class StringResources {
-  static const String appName = 'RGB mix';
   static const String labelNumberSign = '#';
   static const String labelR = 'R';
   static const String labelG = 'G';
@@ -12,6 +11,7 @@ class StringResources {
   static const String heroTagCircle = 'hero_tag_circle';
   static const String heroTagPanel = 'hero_tag_panel';
   static const String heroTagOverview = 'hero_tag_overview';
+  static const String heroTagButtonProcess = 'hero_tag_button_process';
   static const String testKeyNavigateOverview = 'test_key_navigate_overview';
   static const String textColorCodeZero = '00';
   static const String textColorCodeFF = 'FF';

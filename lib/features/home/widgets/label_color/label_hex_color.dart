@@ -1,62 +1,41 @@
+import 'package:base_define/base_define.dart';
+import 'package:base_ui/base_ui.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/features/home/widgets/label_color/label_color_code.dart';
 import 'package:rgb_mix/resources/enum.dart';
 import 'package:rgb_mix/resources/strings.dart';
-import 'package:rgb_mix/utils/ext.dart';
 
-class LabelHexColor extends StatefulWidget {
-  const LabelHexColor({Key? key}) : super(key: key);
-
-  @override
-  State<LabelHexColor> createState() => _LabelHexColorState();
-}
-
-class _LabelHexColorState extends State<LabelHexColor> {
-  bool? _isScrollUp;
+class LabelHexColor extends StatelessWidget {
+  const LabelHexColor({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Text(
-              StringResources.labelNumberSign,
-              style: TextStyle(
-                color: Colors.grey.withOpacity(0.5),
-                fontSize: 40,
+  Widget build(BuildContext context) => RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Text(
+                StringResources.labelNumberSign,
+                style: const TextStyle().s40.c(Colors.grey.withOpacity(0.5)),
               ),
             ),
-          ),
-          ...LabelColorIndex.values.map(
-            (e) => WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: GestureDetector(
-                  onPanUpdate: (details) {
-                    if (details.isDragUp) {
-                      setState(() => _isScrollUp = true);
-                    }
-                    if (details.isDragDown) {
-                      setState(() => _isScrollUp = false);
-                    }
-                  },
-                  onPanEnd: (_) {
-                    if (_isScrollUp == null) return;
-                    context.read<RgbBloc>().add(
-                          _isScrollUp!
-                              ? IncreaseRgbEvent(e.labelColor)
-                              : DecreaseRgbEvent(e.labelColor),
-                        );
-                    _isScrollUp = null;
-                  },
-                  child: LabelColorCode(index: e)),
+            ...ColorLabel.values.mapIndexed(
+              (index, e) => WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: DragDetector(
+                    up: () => context
+                        .read<RgbBloc>()
+                        .add(RgbEvent.touch(e, increase: true)),
+                    down: () => context
+                        .read<RgbBloc>()
+                        .add(RgbEvent.touch(e, increase: false)),
+                    child: LabelColorCode(colorLabel: e)),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }

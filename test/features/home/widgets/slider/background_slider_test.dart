@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:rgb_mix/features/home/widgets/slider/background_slider.dart';
 
+import '../../../../helpers/helpers.dart';
+
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
+  });
+
   testWidgets('BackgroundSlider should call shouldRepaint when change size',
       (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: TestBackgroundSlider(),
-    ));
+    await tester.pumpApp(
+        child: const MaterialApp(
+          home: TestBackgroundSlider(),
+        ),
+        bloc: MockRgbBloc());
     await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
     expect(find.byType(BackgroundSlider), findsOneWidget);
@@ -15,8 +24,10 @@ void main() {
 }
 
 class TestBackgroundSlider extends StatefulWidget {
+  const TestBackgroundSlider({super.key});
+
   @override
-  _TestBackgroundSliderState createState() => _TestBackgroundSliderState();
+  State<TestBackgroundSlider> createState() => _TestBackgroundSliderState();
 }
 
 class _TestBackgroundSliderState extends State<TestBackgroundSlider> {

@@ -3,26 +3,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/features/copied/widgets/panel_container.dart';
-import 'package:rgb_mix/features/home/widgets/slider/background_slider.dart';
 
 import '../../../helpers/helpers.dart';
 import '../../home/widgets/slider/background_slider_test.dart';
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
+  });
   testWidgets('BackgroundSlider should call shouldRepaint when change size',
       (tester) async {
     final bloc = MockRgbBloc();
-    when(() => bloc.state).thenReturn(const RgbState.init());
+    when(() => bloc.state).thenReturn(const RgbState());
     await tester.pumpApp(
         bloc: bloc,
-        child: MaterialApp(
+        child: const MaterialApp(
           home: TestPanelContainer(),
         ));
-    final navigate = find.byKey(ValueKey('navigate'));
+    final navigate = find.byKey(const ValueKey('navigate'));
     await tester.ensureVisible(navigate);
     await tester.tap(navigate);
     await tester.pumpAndSettle();
-    final pop = find.byKey(ValueKey('pop'));
+    final pop = find.byKey(const ValueKey('pop'));
     await tester.ensureVisible(pop);
     await tester.tap(pop);
     await tester.pumpAndSettle();
@@ -30,8 +32,10 @@ void main() {
 }
 
 class TestPanelContainer extends StatefulWidget {
+  const TestPanelContainer({super.key});
+
   @override
-  _TestPanelContainerState createState() => _TestPanelContainerState();
+  State<TestPanelContainer> createState() => _TestPanelContainerState();
 }
 
 class _TestPanelContainerState extends State<TestPanelContainer> {
@@ -41,29 +45,31 @@ class _TestPanelContainerState extends State<TestPanelContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-          key: Key('navigate'),
+          key: const Key('navigate'),
           onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PanelContainerMock(),
+                  builder: (context) => const PanelContainerMock(),
                 ));
           },
-          child: TestBackgroundSlider()),
+          child: const TestBackgroundSlider()),
     );
   }
 }
 
 class PanelContainerMock extends StatelessWidget {
+  const PanelContainerMock({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        key: Key('pop'),
+        key: const Key('pop'),
         onTap: () {
           Navigator.pop(context);
         },
-        child: PanelContainer(),
+        child: const PanelContainer(),
       ),
     );
   }

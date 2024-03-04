@@ -4,7 +4,7 @@ import 'package:rgb_mix/bloc/rgb_bloc.dart';
 import 'package:rgb_mix/features/home/widgets/slider/slider_line.dart';
 
 class SliderProgress extends StatelessWidget {
-  const SliderProgress({Key? key}) : super(key: key);
+  const SliderProgress({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class SliderProgress extends StatelessWidget {
               selector: (state) => state.redValue,
               builder: (context, redValue) => SliderLine(
                 value: redValue,
-                onChange: (hexValue) => bloc.add(ChangeRed(hexValue)),
+                onChange: (hexValue) => bloc.add(RgbEvent.changeRed(hexValue)),
                 color: Colors.red,
               ),
             ),
@@ -28,7 +28,8 @@ class SliderProgress extends StatelessWidget {
               selector: (state) => state.greenValue,
               builder: (context, greenValue) => SliderLine(
                 value: greenValue,
-                onChange: (hexValue) => bloc.add(ChangeGreen(hexValue)),
+                onChange: (hexValue) =>
+                    bloc.add(RgbEvent.changeGreen(hexValue)),
                 color: Colors.green,
               ),
             ),
@@ -36,7 +37,7 @@ class SliderProgress extends StatelessWidget {
               selector: (state) => state.blueValue,
               builder: (context, blueValue) => SliderLine(
                 value: blueValue,
-                onChange: (hexValue) => bloc.add(ChangeBlue(hexValue)),
+                onChange: (hexValue) => bloc.add(RgbEvent.changeBlue(hexValue)),
                 color: Colors.blue,
               ),
             ),

@@ -1,6 +1,4 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
-import '../resources/enum.dart';
 
 extension NumExt on num {
   double get toRad => this * pi / 180.0;
@@ -9,64 +7,7 @@ extension NumExt on num {
 }
 
 extension StringExt on String {
-  String get asFix2 => '${length == 1 ? '0' : ''}$this';
-
-  Color get toColor => Color(int.parse(toUpperCase(), radix: 16));
+  String get asFix2 => length > 1 ? this : '0$this';
 
   double get toDouble => (int.tryParse(this, radix: 16) ?? 0.0).toDouble();
-}
-
-extension LabelColorIndexExt on LabelColorIndex {
-  Color get toColor {
-    switch (index) {
-      case 0:
-      case 1:
-        return Colors.red;
-      case 2:
-      case 3:
-        return Colors.green;
-      case 4:
-      case 5:
-      default:
-        return Colors.blue;
-    }
-  }
-
-  LabelColor get labelColor {
-    switch (index) {
-      case 0:
-      case 1:
-        return LabelColor.red;
-      case 2:
-      case 3:
-        return LabelColor.green;
-      case 4:
-      case 5:
-      default:
-        return LabelColor.blue;
-    }
-  }
-}
-
-extension LabelColorExt on LabelColor {
-  bool get isRed => this == LabelColor.red;
-
-  bool get isGreen => this == LabelColor.green;
-
-  bool get isBlue => this == LabelColor.blue;
-}
-
-extension ColorExt on Color {
-  Color get invert => Color.fromARGB(
-        (opacity * 255).round(),
-        255 - red,
-        255 - green,
-        255 - blue,
-      );
-}
-
-extension DragUpdateDetailsExt on DragUpdateDetails {
-  bool get isDragUp => delta.dy < 0;
-
-  bool get isDragDown => delta.dy > 0;
 }

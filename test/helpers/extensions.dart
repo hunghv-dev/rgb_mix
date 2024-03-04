@@ -1,3 +1,5 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:base_ui/base_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,23 +14,26 @@ extension WidgetTesterExt on WidgetTester {
   Future<void> pumpApp({
     RgbBloc? bloc,
     required Widget child,
-    MockNavigator? navigator,
-  }) {
+    MockStackRouter? mockStackRouter,
+  }) async {
+    final controller = mockStackRouter ?? MockStackRouter();
+    when(() => controller.push(any())).thenAnswer((_) async {});
+    when(() => controller.pop()).thenAnswer((_) async => true);
     return pumpWidget(
       MaterialApp(
-        home: MultiBlocProvider(
-          providers: [
-            if (bloc != null)
-              BlocProvider.value(value: bloc)
-            else
-              BlocProvider(create: (_) => MockRgbBloc()),
-          ],
-          child: navigator == null
-              ? child
-              : MockNavigatorProvider(
-                  navigator: navigator,
-                  child: child,
-                ),
+        home: StackRouterScope(
+          controller: controller,
+          stateHash: 0,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => ThemeCubit(MockSharedPreferences())),
+              if (bloc != null)
+                BlocProvider.value(value: bloc)
+              else
+                BlocProvider(create: (_) => MockRgbBloc()),
+            ],
+            child: child,
+          ),
         ),
       ),
     );

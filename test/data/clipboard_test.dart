@@ -5,7 +5,7 @@ import 'package:rgb_mix/data/clipboard.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  test('CopyClipboard test', () async {
+  test('CopyClipboard', () async {
     final clipboard = CopyClipboard();
     final result = await clipboard.setData('');
     expect(result, true);

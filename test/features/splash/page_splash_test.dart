@@ -1,24 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockingjay/mockingjay.dart';
-import 'package:rgb_mix/features/splash/page_splash.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:rgb_mix/features/splash/splash_page.dart';
 import 'package:rgb_mix/features/splash/widgets/label_logo_app.dart';
 import 'package:rgb_mix/features/splash/widgets/logo_circle_white.dart';
+import 'package:rgb_mix/utils/app_router.gr.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
-  late MockNavigator navigator;
+  late MockStackRouter mockStackRouter;
 
-  setUp(() async {
-    navigator = MockNavigator();
-    when(() => navigator.pushNamed(any())).thenAnswer((_) async {});
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
+  });
+
+  setUp(() {
+    mockStackRouter = MockStackRouter();
   });
 
   group('Page Splash', () {
     testWidgets('start => visible: LogoCircleWhite, LabelLogoApp',
         (tester) async {
-      await tester.pumpApp(child: const PageSplash());
-      expect(find.byType(LogoCircleWhite), findsOneWidget);
+      await tester.pumpApp(child: const SplashPage());
+      expect(find.byType(LogoCircle), findsOneWidget);
       expect(find.byType(LabelLogoApp), findsOneWidget);
     });
 
@@ -26,12 +30,10 @@ void main() {
       'complete of animation => navigate',
       (tester) async {
         await tester.pumpApp(
-          child: const PageSplash(),
-          navigator: navigator,
-        );
-        expect(find.byType(PageSplash), findsOneWidget);
+            child: const SplashPage(), mockStackRouter: mockStackRouter);
+        expect(find.byType(SplashPage), findsOneWidget);
         await tester.pumpAndSettle();
-        verify(() => navigator.pushNamed(any())).called(1);
+        verify(() => mockStackRouter.push(const HomeRoute())).called(1);
       },
     );
   });

@@ -10,7 +10,7 @@ void main() {
     ));
     await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
-    expect(find.byType(LogoCircleWhite), findsOneWidget);
+    expect(find.byType(LogoCircle), findsOneWidget);
   });
 }
 
@@ -27,7 +27,7 @@ class _TestLogoCircleWhiteState extends State<TestLogoCircleWhite> {
     return Scaffold(
       body: InkWell(
           onTap: () => setState(() => state = true),
-          child: LogoCircleWhite(size: state ? 50 : 60)),
+          child: LogoCircle(size: state ? 50 : 60)),
     );
   }
 }

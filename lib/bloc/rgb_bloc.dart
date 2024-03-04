@@ -1,97 +1,78 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rgb_mix/data/clipboard.dart';
-import 'package:rgb_mix/resources/enum.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rgb_mix/resources/strings.dart';
 import 'package:rgb_mix/utils/ext.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/repository.dart';
+import '../resources/enum.dart';
+
+part 'rgb_bloc.freezed.dart';
 part 'rgb_event.dart';
-
 part 'rgb_state.dart';
 
+@injectable
 class RgbBloc extends Bloc<RgbEvent, RgbState> {
-  final CopyClipboard clipboard;
-  final SharedPreferences sharedPreferences;
-
-  RgbBloc({required this.clipboard, required this.sharedPreferences})
-      : super(const RgbState.init()) {
-    on<InitRgbEvent>(onInitRgbEvent);
-    on<ChangeRed>(onChangeRed);
-    on<ChangeGreen>(onChangeGreen);
-    on<ChangeBlue>(onChangeBlue);
-    on<IncreaseRgbEvent>(onIncreaseRgbEvent);
-    on<DecreaseRgbEvent>(onDecreaseRgbEvent);
-    on<SetDataClipboardEvent>(onSetDataClipboardEvent);
-    on<MixAgainEvent>(onMixAgainEvent);
+  RgbBloc(this._repository) : super(const RgbState()) {
+    on<_Init>(_onInit);
+    on<_ChangeRed>(_onChangeRed);
+    on<_ChangeGreen>(_onChangeGreen);
+    on<_ChangeBlue>(_onChangeBlue);
+    on<_Touch>(_onTouch);
+    on<_SetClipboard>(_onSetClipboard);
+    on<_MixAgain>(_onMixAgain);
   }
 
-  void onInitRgbEvent(InitRgbEvent event, Emitter emit) {
-    final red =
-        sharedPreferences.getString(StringResources.prefsTagRedColorCode);
-    final green =
-        sharedPreferences.getString(StringResources.prefsTagGreenColorCode);
-    final blue =
-        sharedPreferences.getString(StringResources.prefsTagBlueColorCode);
-    emit(state.copyWith(red: red, green: green, blue: blue));
-  }
+  final Repository _repository;
 
-  void onChangeRed(ChangeRed event, Emitter emit) {
-    emit(state.copyWith(red: event.value.toUpperCase()));
-  }
+  void _onInit(_, emit) => emit(state.copyWith(
+        red: _repository.getRed(),
+        green: _repository.getGreen(),
+        blue: _repository.getBlue(),
+      ));
 
-  void onChangeGreen(ChangeGreen event, Emitter emit) {
-    emit(state.copyWith(green: event.value.toUpperCase()));
-  }
+  void _onChangeRed(_ChangeRed event, emit) =>
+      emit(state.copyWith(red: event.value.toUpperCase().asFix2));
 
-  void onChangeBlue(ChangeBlue event, Emitter emit) {
-    emit(state.copyWith(blue: event.value.toUpperCase()));
-  }
+  void _onChangeGreen(_ChangeGreen event, emit) =>
+      emit(state.copyWith(green: event.value.toUpperCase().asFix2));
 
-  String? _increase(double value) =>
-      value < 255 ? (value + 1).hex.toUpperCase() : null;
+  void _onChangeBlue(_ChangeBlue event, emit) =>
+      emit(state.copyWith(blue: event.value.toUpperCase().asFix2));
 
-  void onIncreaseRgbEvent(IncreaseRgbEvent event, Emitter emit) {
+  String _increase(double value) => value < 255
+      ? (value + 1).hex.toUpperCase().asFix2
+      : StringResources.textColorCodeZero;
+
+  String _decrease(double value) => value > 0
+      ? (value - 1).hex.toUpperCase().asFix2
+      : StringResources.textColorCodeFF;
+
+  _onTouch(_Touch event, emit) {
     if (event.color.isRed) {
-      return emit(state.copyWith(red: _increase(state.redValue)));
-    }
-    if (event.color.isGreen) {
-      return emit(state.copyWith(green: _increase(state.greenValue)));
-    }
-    if (event.color.isBlue) {
-      return emit(state.copyWith(blue: _increase(state.blueValue)));
-    }
-  }
-
-  String? _decrease(double value) =>
-      value > 0 ? (value - 1).hex.toUpperCase() : null;
-
-  void onDecreaseRgbEvent(DecreaseRgbEvent event, Emitter emit) {
-    if (event.color.isRed) {
-      return emit(state.copyWith(red: _decrease(state.redValue)));
-    }
-    if (event.color.isGreen) {
-      return emit(state.copyWith(green: _decrease(state.greenValue)));
-    }
-    if (event.color.isBlue) {
-      return emit(state.copyWith(blue: _decrease(state.blueValue)));
+      emit(state.copyWith(
+          red: event.increase
+              ? _increase(state.redValue)
+              : _decrease(state.redValue)));
+    } else if (event.color.isGreen) {
+      emit(state.copyWith(
+          green: event.increase
+              ? _increase(state.greenValue)
+              : _decrease(state.greenValue)));
+    } else if (event.color.isBlue) {
+      emit(state.copyWith(
+          blue: event.increase
+              ? _increase(state.blueValue)
+              : _decrease(state.blueValue)));
     }
   }
 
-  void onSetDataClipboardEvent(
-      SetDataClipboardEvent event, Emitter emit) async {
-    await Future.wait([
-      clipboard.setData(state.colorCopy),
-      sharedPreferences.setString(
-          StringResources.prefsTagRedColorCode, state.red),
-      sharedPreferences.setString(
-          StringResources.prefsTagGreenColorCode, state.green),
-      sharedPreferences.setString(
-          StringResources.prefsTagBlueColorCode, state.blue),
-    ]).then((_) => emit(state.copyWith(isCopied: true)));
-  }
+  void _onSetClipboard(_, emit) async => await Future.wait([
+        _repository.saveClipboard(state.colorCopy),
+        _repository.setRed(state.red),
+        _repository.setGreen(state.green),
+        _repository.setBlue(state.blue),
+      ]).then((_) => emit(state.copyWith(isCopied: true)));
 
-  void onMixAgainEvent(MixAgainEvent event, Emitter emit) {
-    emit(state.copyWith(isCopied: false));
-  }
+  void _onMixAgain(_, emit) => emit(state.copyWith(isCopied: false));
 }
