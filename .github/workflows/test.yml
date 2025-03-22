@@ -26,6 +26,9 @@ jobs:
           channel: stable
           version: 3.7.12
 
+      - name: Authenticate with GitHub
+        run: git config --global url."https://${{ secrets.GH_PAT }}@github.com/".insteadOf "https://github.com/"
+
       - name: Install dependencies
         run: flutter pub get
 
